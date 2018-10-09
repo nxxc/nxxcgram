@@ -19,6 +19,10 @@ urlpatterns = [
         "users/",
         include("nxxcgram.users.urls", namespace="users"),
     ),
+    path(
+        "images/",
+        include("nxxcgram.images.urls", namespace="images"),
+    ),
     path("accounts/", include("allauth.urls")),
     # Your stuff: custom urls includes go here
 ] + static(
