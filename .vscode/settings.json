@@ -1,5 +1,7 @@
 {
     "python.pythonPath": "/Users/nxxc/.local/share/virtualenvs/nxxcgram-xQ3PGdTW/bin/python",
     "python.linting.pylintEnabled": true,
-    "python.linting.enabled": true
+    "python.linting.enabled": true,
+    "cSpell.enabled":true,
+    "cSpell.language": "en"
 }
