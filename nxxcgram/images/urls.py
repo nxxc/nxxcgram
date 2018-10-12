@@ -3,19 +3,13 @@ from . import views
 
 app_name = "images"
 urlpatterns = [
-    path(
-        "all/",
-        view=views.ListAllImages.as_view(),
-        name="all_images"
-    ),
-    path(
-        "likes/",
-        view=views.ListAllLikes.as_view(),
-        name="all_likes"
-    ),
-    path(
-        "comments/",
-        view=views.ListAllComments.as_view(),
-        name="all_comments"
-    ),
+    path("", view=views.Feed.as_view(), name="feed"),
+    path("<image_id>/like/", view=views.LikeImage.as_view(), name="like_image")
 ]
+
+
+# /images/3/like
+# 0 create the url and the view
+# 1 take the id from the url
+# 2 we want to find an image with this id
+# 3 we want to create a like for that image

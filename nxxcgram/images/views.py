@@ -3,36 +3,36 @@ from rest_framework.response import Response
 from . import models, serializers
 
 
-class ListAllImages(APIView):
-
-    def get(self, request, format=None):  # fomat = None 으로 설정하면 제이슨으로 설정됨
-
-        all_images = models.Image.objects.all()
-
-        serializer = serializers.ImageSerializer(all_images, many=True)
-
-        return Response(data=serializer.data)
-
-
-class ListAllComments(APIView):
+class Feed(APIView):
 
     def get(self, request, format=None):
 
-        all_comments = models.Comment.objects.all()
+        user = request.user
 
-        serializer = serializers.CommnetSerializer(all_comments, many=True)
+        following_users = user.following.all()
 
-        return Response(data=serializer.data)
+        image_list = []
+
+        for following_users in following_users:
+
+            user_images = following_users.images.all()[:2]
+
+            for image in user_images:
+
+                image_list.append(image)
+
+        sorted_list = sorted(image_list, key=lambda image: image.created_at, reverse=False)
+
+        print(sorted_list)
+        serializer = serializers.ImageSerializer(sorted_list, many=True)
+
+        return Response(serializer.data)
 
 
-class ListAllLikes(APIView):
+class LikeImage(APIView):
 
-    def get(self, request, format=None):
+    def get(self, request, image_id, format=None):
 
-        all_likes = models.Like.objects.all()
+        print(image_id)
 
-        serializer = serializers.LikeSerializer(all_likes, many=True)
-
-        return Response(data=serializer.data)
-
-        
+        return Response(status=200)

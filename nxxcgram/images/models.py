@@ -13,7 +13,6 @@ class TimeStampedModel(models.Model):
         abstract = True
 
 
-
 # @python_2_unicode_compatible
 class Image(TimeStampedModel):
 
@@ -21,10 +20,17 @@ class Image(TimeStampedModel):
     file = models.ImageField()
     location = models.CharField(max_length=140)
     caption = models.TextField()
-    creator = models.ForeignKey(user_models.User, on_delete=models.CASCADE, null=True)
+    creator = models.ForeignKey(user_models.User, on_delete=models.CASCADE, null=True, related_name='images')
+
+    @property
+    def like_count(self):
+        return self.likes.all().count()
 
     def __str__(self):
         return '{}-{}'.format(self.location, self.caption)
+
+    class Meta:
+        ordering = ['-created_at']
 
 
 # @python_2_unicode_compatible
