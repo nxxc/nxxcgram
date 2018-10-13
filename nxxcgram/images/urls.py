@@ -1,3 +1,4 @@
+# cSpell:ignore unlikes
 from django.urls import path
 from . import views
 
@@ -9,10 +10,3 @@ urlpatterns = [
     path("<image_id>/comments/", view=views.CommentOnImage.as_view(), name="comment_image"),
     path("comments/<comment_id>/", view=views.Comment.as_view(), name="comment")
 ]
-
-
-# /images/3/like
-# 0 create the url and the view
-# 1 take the id from the url
-# 2 we want to find an image with this id
-# 3 we want to create a like for that image

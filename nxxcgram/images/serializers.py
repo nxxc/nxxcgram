@@ -1,3 +1,4 @@
+# cSpell:ignore nxxcgram
 from rest_framework import serializers
 from . import models
 from nxxcgram.users import models as user_models
