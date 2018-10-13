@@ -12,4 +12,4 @@ class ExploreUsers(APIView):
 
         serializer = serializers.ExploreUserSerializer(last_five, many=True)
 
-        return Response(data=serializer.data, status=status.HTTP_200_OK)
+        return Response(data=serializer.data, status=status.HTTP_200_OK) 
