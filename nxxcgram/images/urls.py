@@ -1,4 +1,3 @@
-# cSpell:ignore unlikes
 from django.urls import path
 from . import views
 
