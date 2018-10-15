@@ -67,7 +67,9 @@ THIRD_PARTY_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
-    'rest_framework', #REST framework
+    'rest_framework', #REST framework,
+    'taggit', # Tags for the photos,
+    'taggit_serializer',
 ]
 LOCAL_APPS = [
     'nxxcgram.users.apps.UsersAppConfig',
@@ -239,3 +241,4 @@ SOCIALACCOUNT_ADAPTER = 'nxxcgram.users.adapters.SocialAccountAdapter'
 
 # Your stuff...
 # ------------------------------------------------------------------------------
+TAGGIT_CASE_INSENSITIVE = True

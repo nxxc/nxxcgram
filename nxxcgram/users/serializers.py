@@ -5,7 +5,7 @@ from nxxcgram.images import serializers as images_serializer
 
 class UserProfileSerializer(serializers.ModelSerializer):
 
-    images= images_serializer.UserProfileImageSerializer(many=True)
+    images= images_serializer.CountImageSerializer(many=True)
 
     class Meta:
         model = models.User
