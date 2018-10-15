@@ -1,19 +1,22 @@
 from rest_framework import serializers
 from . import models
 from nxxcgram.users import models as user_models
+from taggit_serializer.serializers import (TagListSerializerField, TaggitSerializer)
 
 
-
-class UserProfileImageSerializer(serializers.ModelSerializer):
+class CountImageSerializer(serializers.ModelSerializer):
+    
+    tags = TagListSerializerField()
 
     class Meta:
         model = models.Image
         fields = (
+            'id',
             'file',
-             'comment_count',
-             'like_count',
+            'comment_count',
+            'like_count',
+            'tags'
         )
-
 
 
 class FeedUserSerializer(serializers.ModelSerializer):
@@ -37,7 +40,7 @@ class CommnetSerializer(serializers.ModelSerializer):
             'id',
             'message',
             'creator',
-        ) 
+        )
 
 
 class LikeSerializer(serializers.ModelSerializer):
