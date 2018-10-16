@@ -2,6 +2,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
 from . import models, serializers
+from nxxcgram.notifications import views as notification_views
 
 
 class Feed(APIView):
@@ -36,6 +37,8 @@ class LikeImage(APIView):
 
         user = request.user
 
+        # create notification for like
+
         try:
             found_image = models.Image.objects.get(id=image_id)
 
@@ -59,7 +62,9 @@ class LikeImage(APIView):
                 image=found_image
             )
 
-            # new_like.save()
+            notification_views.create_notification(user, found_image.creator, 'like', found_image)
+
+            new_like.save()
 
         # try -> Find preexisting_like on image -> if there is 'like' on image -> use preexisting_like.delete () to remove 'like' and return HTTP_204_NO_CONTENT
         # except -> if there is no 'like' on image-> use models.Like.objects.create() to make 'like' -> return Response(status=status.HTTP_201_CREATED)
@@ -99,6 +104,7 @@ class CommentOnImage(APIView):
     def post(self, request, image_id, format=None):
 
         user = request.user  # the user who write a comment is user who request to HTTP
+
         try:
             found_image = models.Image.objects.get(id=image_id)
 
@@ -111,6 +117,9 @@ class CommentOnImage(APIView):
         if serializer.is_valid():
 
             serializer.save(creator=user, image=found_image)
+
+            notification_views.create_notification(
+                user, found_image.creator, 'comment', found_image, serializer.data['message'])
 
             return Response(data=serializer.data, status=status.HTTP_201_CREATED)
 
@@ -141,7 +150,7 @@ class Search(APIView):
         hashtags = request.query_params.get('hashtags', None)
 
         if hashtags is not None:
-           
+
             hashtags = hashtags.split(",")
 
             images = models.Image.objects.filter(tags__name__in=hashtags).distinct()
@@ -149,7 +158,7 @@ class Search(APIView):
             serializer = serializers.CountImageSerializer(images, many=True)
 
             return Response(data=serializer.data, status=status.HTTP_200_OK)
-        
+
         else:
 
             return Response(status=status.HTTP_400_BAD_REQUEST)

@@ -2,6 +2,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
 from . import models, serializers
+from nxxcgram.notifications import views as notification_views
 
 
 class ListUsers(APIView):
@@ -21,6 +22,8 @@ class FollowUser(APIView):
 
         user = request.user
 
+        # follow notification
+
         try:
             user_to_follow = models.User.objects.get(id=user_id)
 
@@ -32,12 +35,15 @@ class FollowUser(APIView):
 
         user.save()
 
+        notification_view.create_notification(user, user_to_follow, 'follow' )
+
         return Response(status=status.HTTP_200_OK)
 
 
 class UnFollowUser(APIView):
 
     def post(self, request, user_id, format=None):
+
         user = request.user
 
         try:

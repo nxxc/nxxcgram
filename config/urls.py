@@ -23,6 +23,10 @@ urlpatterns = [
         "images/",
         include("nxxcgram.images.urls", namespace="images"),
     ),
+    path(
+        'notifications/',
+        include('nxxcgram.notifications.urls', namespace='notifications'),
+    ),
     path("accounts/", include("allauth.urls")),
     # Your stuff: custom urls includes go here
 ] + static(

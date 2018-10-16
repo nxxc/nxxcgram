@@ -4,6 +4,16 @@ from nxxcgram.users import models as user_models
 from taggit_serializer.serializers import (TagListSerializerField, TaggitSerializer)
 
 
+class SmallImageSerializer(serializers.ModelSerializer):
+
+    """Used for the Notifications"""
+
+    class Meta:
+        model = models.Image
+        fields = (
+            'file',
+        )
+
 class CountImageSerializer(serializers.ModelSerializer):
     
     tags = TagListSerializerField()

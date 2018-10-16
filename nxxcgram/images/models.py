@@ -1,10 +1,11 @@
 from django.db import models
+from django.utils.encoding import python_2_unicode_compatible
 from nxxcgram.users import models as user_models
 from taggit.managers import  TaggableManager
 # Create your models here.
 
 
-# @python_2_unicode_compatible
+@python_2_unicode_compatible
 class TimeStampedModel(models.Model):
 
     created_at = models.DateField(auto_now_add=True)
@@ -14,7 +15,7 @@ class TimeStampedModel(models.Model):
         abstract = True
 
 
-# @python_2_unicode_compatible
+@python_2_unicode_compatible
 class Image(TimeStampedModel):
 
     """ Image model """
@@ -39,7 +40,7 @@ class Image(TimeStampedModel):
         ordering = ['-created_at']
 
 
-# @python_2_unicode_compatible
+@python_2_unicode_compatible
 class Comment(TimeStampedModel):
 
     """ Comment model """
@@ -51,7 +52,7 @@ class Comment(TimeStampedModel):
         return self.message
 
 
-# @python_2_unicode_compatible
+@python_2_unicode_compatible
 class Like(TimeStampedModel):
 
     """ Like model """
