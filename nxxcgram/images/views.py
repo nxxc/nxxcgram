@@ -6,7 +6,8 @@ from nxxcgram.notifications import views as notification_views
 from nxxcgram.users import models as user_models
 from nxxcgram.users import serializers as user_serializers
 
-class Feed(APIView):
+
+class Images(APIView):
 
     def get(self, request, format=None):
 
@@ -25,7 +26,7 @@ class Feed(APIView):
                 image_list.append(image)
 
         my_images = user.images.all()[:2]
-        
+
         for image in my_images:
 
             image_list.append(image)
@@ -37,11 +38,25 @@ class Feed(APIView):
 
         return Response(serializer.data)
 
+    def post(self, request, format=None):
+
+        user = request.user
+
+        serializer = serializers.InputImageSerializer(data=request.data)
+
+        if serializer.is_valid():
+
+            serializer.save(creator=user)
+
+            return Response(data=serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class LikeImage(APIView):
 
     def get(self, request, image_id, format=None):
-    
+
         likes = models.Like.objects.filter(image__id=image_id)
 
         like_creators_ids = likes.values('creator_id')
@@ -210,7 +225,7 @@ class ImageDetail(APIView):
 
         except models.Image.DoesNotExist:
 
-            return Response(status=status.HTTP_404_NOT_FOUND) 
+            return Response(status=status.HTTP_404_NOT_FOUND)
 
         serializer = serializers.ImageSerializer(image)
 
