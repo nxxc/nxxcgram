@@ -5,15 +5,20 @@ from nxxcgram.images import serializers as images_serializer
 
 class UserProfileSerializer(serializers.ModelSerializer):
 
-    images= images_serializer.CountImageSerializer(many=True)
+    images = images_serializer.CountImageSerializer(many=True)
+    following_count: serializers.ReadOnlyField()
+    followers_count: serializers.ReadOnlyField()
+    post_count: serializers.ReadOnlyField()
+
 
     class Meta:
         model = models.User
         fields = (
+            'profile_image',
             'username',
             'name',
             'bio',
-            'website',
+            'website', 
             'post_count',
             'followers_count',
             'following_count',
