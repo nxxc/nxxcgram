@@ -35,7 +35,7 @@ class FollowUser(APIView):
 
         user.save()
 
-        notification_view.create_notification(user, user_to_follow, 'follow' )
+        notification_view.create_notification(user, user_to_follow, 'follow')
 
         return Response(status=status.HTTP_200_OK)
 
@@ -121,7 +121,7 @@ class UserProfile(APIView):
 
         try:
 
-            found_user = models.User.objects.get(username=username) 
+            found_user = models.User.objects.get(username=username)
 
             return found_user
 
@@ -142,7 +142,7 @@ class UserProfile(APIView):
         return Response(data=serializer.data, status=status.HTTP_200_OK)
 
     def put(self, request, username, format=None):
-        
+
         user = request.user
 
         found_user = self.get_user(username)
@@ -150,7 +150,7 @@ class UserProfile(APIView):
         if found_user is None:
 
             return Response(status=status.HTTP_404_NOT_FOUND)
-        
+
         elif found_user.username != user.username:
 
             return Response(status=status.HTTP_401_UNAUTHORIZED)
@@ -167,3 +167,44 @@ class UserProfile(APIView):
             else:
 
                 return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class ChangePassword(APIView):
+
+    def put(self, request, username, format=None):
+
+        user = request.user
+
+        if user.username == username:
+
+            current_password = request.data.get('current_password', None)
+
+            if current_password is not None:
+
+                password_match = user.check_password(current_password)
+
+                if password_match:
+
+                    new_password = request.data.get('new_password', None)
+
+                    if new_password is not None:
+
+                        user.set_password(new_password)
+
+                        user.save()
+
+                        return Response(status=status.HTTP_200_OK)
+
+                    else:
+                        
+                        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+                else:
+
+                    return Response(status=status.HTTP_400_BAD_REQUEST)
+            else:
+
+                return Response(status=status.HTTP_400_BAD_REQUEST)
+        else:
+
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
