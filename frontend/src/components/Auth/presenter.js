@@ -1,6 +1,8 @@
 import React from "react";
 import styles from "./styles.module.scss";
-import { LoginForm, SignupForm } from "components/AuthForms";
+import PropTypes from "prop-types";
+import LoginForm from "components/LoginForm";
+import SignupForm from "components/SignupForm";
 
 const Auth = (props, context) => (
   <main className={styles.auth}>
@@ -9,30 +11,30 @@ const Auth = (props, context) => (
     </div>
     <div className={styles.column}>
       <div className={`${styles.whiteBox} ${styles.formBox}`}>
-        <img src={require("images/logo.png")} alt="Logo"/>
-        {props.action ==="login"&& <LoginForm/>}
-        {props.action ==="signup"&& <SignupForm/>}
+        <img src={require("images/logo.png")} alt="Logo" />
+        {props.action === "login" && <LoginForm />}
+        {props.action === "signup" && <SignupForm />}
       </div>
       <div className={styles.whiteBox}>
-        {props.action === "login" && (
+        {props.action === "signup" && (
           <p className={styles.text}>
-            Don't have an account?{" "}
+            {context.t("Have an account?")}{" "}
             <span className={styles.changeLink} onClick={props.changeAction}>
-              Sign up
+              {context.t("Log in")}
             </span>
           </p>
         )}
-        {props.action === "signup" && (
-          <p>
-            Have an account?{" "}
+        {props.action === "login" && (
+          <p className={styles.text}>
+            {context.t("Don't have an account?")}{" "}
             <span className={styles.changeLink} onClick={props.changeAction}>
-              Log in
+              {context.t("Sign up")}
             </span>
           </p>
         )}
       </div>
       <div className={styles.appBox}>
-        <span>Get the app</span>
+        <span>{context.t("Get the app")}</span>
         <div className={styles.appstores}>
           <img
             src={require("images/ios.png")}
@@ -47,4 +49,9 @@ const Auth = (props, context) => (
     </div>
   </main>
 );
+
+Auth.contextTypes = {
+  t: PropTypes.func.isRequired
+};
+
 export default Auth;
