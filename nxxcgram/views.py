@@ -14,7 +14,7 @@ class ReactAppView(View):
         except:
             return HttpResponse(
                 """
-                index.html not found! build yout React app!!
+                index.html not found! build your React app!!
                 """,
                 status=501,
             )
