@@ -1,10 +1,19 @@
-//imports
+// imports
 
-//actions
+// actions
 
-//action creators
+const SAVE_TOKEN = "SAVE_TOKEN";
 
-//API actions
+// action creators
+
+function saveToken(token) {
+  return {
+    type: SAVE_TOKEN,
+    token
+  };
+}
+
+// API actions
 
 function facebookLogin(access_token) {
   return function(dispatch) {
@@ -17,30 +26,46 @@ function facebookLogin(access_token) {
         access_token
       })
     })
-      .then(response => response.json)
-      .then(json => console.log(json))
+      .then(response => response.json())
+      .then(json => {
+        if (json.token) {
+          localStorage.setItem("jwt", json.token);
+          dispatch(saveToken(json.token));
+        }
+      })
       .catch(err => console.log(err));
   };
 }
 
-//initial state
+// initial state
 
 const initialState = {
-  isLoggedIn: localStorage.getItem("jwt") || false
+  isLoggedIn: localStorage.getItem("jwt") ? true : false
 };
 
-//reducer
+// reducer
 
 function reducer(state = initialState, action) {
   switch (action.type) {
+    case SAVE_TOKEN:
+      return applySetToken(state, action);
     default:
       return state;
   }
 }
 
-//reducer function
+// reducer functions
 
-//exports
+function applySetToken(state, action) {
+  const { token } = action;
+  return {
+    ...state,
+    isLoggedIn: true,
+    token: token
+  };
+}
+
+// exports
 
 const actionCreators = {
   facebookLogin
@@ -48,5 +73,6 @@ const actionCreators = {
 
 export { actionCreators };
 
-//reducer export
+// export reducer by default
+
 export default reducer;
