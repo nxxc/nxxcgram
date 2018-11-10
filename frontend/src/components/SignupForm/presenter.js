@@ -10,13 +10,12 @@ const SignupForm = (props, context) => (
     </h3>
     <FacebookLogin
       appId="327011371210457"
-      autoLoad={true}
+      autoLoad={false}
       fields="name,email,picture"
       callback={props.handleFacebookLogin}
       cssClass={formStyles.button}
       icon="fa-facebook-official"
       textButton={context.t("Log in with Facebook")}
-
     />
     <span className={formStyles.divider}>{context.t("or")}</span>
     <form className={formStyles.form} onSubmit={props.handleSubmit}>
