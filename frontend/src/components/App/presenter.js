@@ -4,9 +4,11 @@ import { Route, Switch } from "react-router-dom";
 import "./styles.module.scss";
 import Auth from "components/Auth";
 import Footer from "components/Footer";
+import Navigation from "components/Navigation";
 
 const App = props => [
   //Nav,
+  props.isLoggedIn ? <Navigation key={1} /> : null,
   props.isLoggedIn ? <PrivateRoutes key={2} /> : <PublicRoutes key={2} />,
   <Footer key={3} />
 ];
