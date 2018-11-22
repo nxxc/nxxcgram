@@ -37,7 +37,7 @@ class FollowUser(APIView):
 
         user.save()
 
-        notification_view.create_notification(user, user_to_follow, 'follow')
+        notification_views.create_notification(user, user_to_follow, 'follow')
 
         return Response(status=status.HTTP_200_OK)
 
@@ -155,7 +155,7 @@ class UserProfile(APIView):
 
         elif found_user.username != user.username:
 
-            return Response(status=status.HTTP_401_UNAUTHORIZED)
+            return Response(status=status.HTTP_400_BAD_REQUEST)
 
         else:
             serializer = serializers.UserProfileSerializer(found_user, data=request.data, partial=True)
@@ -209,7 +209,7 @@ class ChangePassword(APIView):
                 return Response(status=status.HTTP_400_BAD_REQUEST)
         else:
 
-            return Response(status=status.HTTP_401_UNAUTHORIZED)
+            return Response(status=status.HTTP_401)
 
 
 class FacebookLogin(SocialLoginView):
