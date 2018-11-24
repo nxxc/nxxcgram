@@ -2,6 +2,9 @@ import React from "react";
 import PropTypes from "prop-types";
 import styles from "./styles.module.scss";
 import PhotoActions from "components/PhotoActions";
+import PhotoComments from "components/PhotoComments";
+import TimeStamp from "components/TimeStamp";
+import CommentBox from 'components/CommentBox'
 
 const FeedPhoto = (props, context) => {
   return (
@@ -18,7 +21,14 @@ const FeedPhoto = (props, context) => {
       </header>
       <img src={props.file} alt={props.caption} />
       <div>
-        <PhotoActions number={props.like_count}/>
+        <PhotoActions number={props.like_count} />
+        <PhotoComments
+          caption={props.caption}
+          creator={props.creator.username}
+          comments={props.comments}
+        />
+        <TimeStamp time={props.created_at}/>
+        <CommentBox />
       </div>
     </div>
   );
