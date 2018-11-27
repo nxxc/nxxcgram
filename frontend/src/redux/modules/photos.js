@@ -36,7 +36,7 @@ function getFeed() {
     const {
       user: { token }
     } = getState();
-    fetch("/images/", {
+    fetch(`/images/`, {
       headers: {
         Authorization: `JWT ${token}`
       }

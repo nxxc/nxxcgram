@@ -31,7 +31,7 @@ const FeedPhoto = (props, context) => {
           creator={props.creator.username}
           comments={props.comments}
         />
-        <TimeStamp time={props.created_at} />
+        <TimeStamp time={props.natural_time} />
         <CommentBox />
       </div>
     </div>
@@ -56,7 +56,7 @@ FeedPhoto.propTypes = {
       message: PropTypes.string.isRequired
     })
   ).isRequired,
-  created_at: PropTypes.string.isRequired,
+  natural_time: PropTypes.string.isRequired,
   is_liked: PropTypes.bool.isRequired
 };
 

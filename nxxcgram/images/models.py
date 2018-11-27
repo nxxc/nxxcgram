@@ -9,8 +9,8 @@ from django.contrib.humanize.templatetags.humanize import naturaltime
 @python_2_unicode_compatible
 class TimeStampedModel(models.Model):
 
-    created_at = models.DateField(auto_now_add=True)
-    updated_at = models.DateField(auto_now=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         abstract = True
