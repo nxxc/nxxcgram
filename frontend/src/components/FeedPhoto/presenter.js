@@ -4,7 +4,7 @@ import styles from "./styles.module.scss";
 import PhotoActions from "components/PhotoActions";
 import PhotoComments from "components/PhotoComments";
 import TimeStamp from "components/TimeStamp";
-import CommentBox from 'components/CommentBox'
+import CommentBox from "components/CommentBox";
 
 const FeedPhoto = (props, context) => {
   return (
@@ -21,13 +21,17 @@ const FeedPhoto = (props, context) => {
       </header>
       <img src={props.file} alt={props.caption} />
       <div>
-        <PhotoActions number={props.like_count} />
+        <PhotoActions
+          number={props.like_count}
+          isLiked={props.is_liked}
+          photoId={props.id}
+        />
         <PhotoComments
           caption={props.caption}
           creator={props.creator.username}
           comments={props.comments}
         />
-        <TimeStamp time={props.created_at}/>
+        <TimeStamp time={props.created_at} />
         <CommentBox />
       </div>
     </div>
@@ -52,7 +56,8 @@ FeedPhoto.propTypes = {
       message: PropTypes.string.isRequired
     })
   ).isRequired,
-  created_at: PropTypes.string.isRequired
+  created_at: PropTypes.string.isRequired,
+  is_liked: PropTypes.bool.isRequired
 };
 
 export default FeedPhoto;

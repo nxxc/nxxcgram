@@ -77,8 +77,7 @@ class ImageSerializer(TaggitSerializer, serializers.ModelSerializer):
             'creator',
             'created_at',
             'tags',
-            'is_liked'
-
+            'is_liked',
         )
 
     def get_is_liked(self, obj):
