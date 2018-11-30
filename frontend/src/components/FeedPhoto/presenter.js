@@ -10,7 +10,7 @@ import UserList from "components/UserList";
 const FeedPhoto = (props, context) => {
   return (
     <div className={styles.feedPhoto}>
-      <header className={styles.header}>>
+      <header className={styles.header}>
         <img
           src={props.creator.profile_image || require("images/noPhoto.jpeg")}
           alt={props.creator.username}
