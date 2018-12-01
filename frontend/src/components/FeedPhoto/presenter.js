@@ -17,7 +17,7 @@ const FeedPhoto = (props, context) => {
           className={styles.image}
         />
         <div className={styles.headerColumn}>
-          <span className={styles.creator}> {props.creator.username}</span>
+          <span className={styles.creator}>{props.creator.username}</span>
           <span className={styles.location}>{props.location}</span>
         </div>
       </header>
@@ -38,17 +38,22 @@ const FeedPhoto = (props, context) => {
         <CommentBox photoId={props.id} />
       </div>
       {props.seeingLikes && (
-        <UserList title={context.t("Likes")} closeLikes={props.closeLikes} />
+        <UserList
+          title={context.t("Likes")}
+          closeLikes={props.closeLikes}
+          userList={props.likes}
+        />
       )}
     </div>
   );
 };
 
-FeedPhoto.contextTypes={
-  t:PropTypes.func.isRequired,
-}
+FeedPhoto.contextTypes = {
+  t: PropTypes.func.isRequired
+};
 
 FeedPhoto.propTypes = {
+  id: PropTypes.number.isRequired,
   creator: PropTypes.shape({
     profile_image: PropTypes.string,
     username: PropTypes.string.isRequired
@@ -59,18 +64,26 @@ FeedPhoto.propTypes = {
   caption: PropTypes.string.isRequired,
   comments: PropTypes.arrayOf(
     PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      message: PropTypes.string.isRequired,
       creator: PropTypes.shape({
         profile_image: PropTypes.string,
         username: PropTypes.string.isRequired
-      }).isRequired,
-      message: PropTypes.string.isRequired
+      }).isRequired
     })
   ).isRequired,
   natural_time: PropTypes.string.isRequired,
   is_liked: PropTypes.bool.isRequired,
   seeingLikes: PropTypes.bool.isRequired,
+  openLikes: PropTypes.func.isRequired,
   closeLikes: PropTypes.func.isRequired,
-  openLikes: PropTypes.func.isRequired
+  likes: PropTypes.arrayOf(
+    PropTypes.shape({
+      profile_image: PropTypes.string,
+      username: PropTypes.string.isRequired,
+      name: PropTypes.string
+    }).isRequired
+  )
 };
 
 export default FeedPhoto;
