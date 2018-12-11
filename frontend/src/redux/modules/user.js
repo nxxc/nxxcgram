@@ -7,7 +7,8 @@ const LOGOUT = "LOGOUT";
 const SET_USER_LIST = "SET_USER_LIST";
 const FOLLOW_USER = "FOLLOW_USER";
 const UNFOLLOW_USER = "UNFOLLOW_USER";
-const SET_EXPLORE = "SET_EXPLORE";
+const SET_IMAGE_LIST = "SET_IMAGE_LIST";
+
 // action creators
 
 function saveToken(token) {
@@ -23,6 +24,20 @@ function logout() {
   };
 }
 
+function setFollowUser(userId) {
+  return {
+    type: FOLLOW_USER,
+    userId
+  };
+}
+
+function setUnfollowUser(userId) {
+  return {
+    type: UNFOLLOW_USER,
+    userId
+  };
+}
+
 function setUserList(userList) {
   return {
     type: SET_USER_LIST,
@@ -30,29 +45,17 @@ function setUserList(userList) {
   };
 }
 
-function setFollowUser(userId) {
+function setImageList(imageList) {
   return {
-    type: FOLLOW_USER,
-    userId
-  };
-}
-function setUnfollowUser(userId) {
-  return {
-    type: UNFOLLOW_USER,
-    userId
-  };
-}
-function setExplore(userList) {
-  return {
-    type: SET_EXPLORE,
-    userList
+    type: SET_IMAGE_LIST,
+    imageList
   };
 }
 
 // API actions
 
 function facebookLogin(access_token) {
-  return function(dispatch) {
+  return dispatch => {
     fetch("/users/login/facebook/", {
       method: "POST",
       headers: {
@@ -73,7 +76,7 @@ function facebookLogin(access_token) {
 }
 
 function usernameLogin(username, password) {
-  return function(dispatch) {
+  return dispatch => {
     fetch("/rest-auth/login/", {
       method: "POST",
       headers: {
@@ -95,7 +98,7 @@ function usernameLogin(username, password) {
 }
 
 function createAccount(username, password, email, name) {
-  return function(dispatch) {
+  return dispatch => {
     fetch("/rest-auth/registration/", {
       method: "POST",
       headers: {
@@ -114,15 +117,14 @@ function createAccount(username, password, email, name) {
         if (json.token) {
           dispatch(saveToken(json.token));
         }
-      });
+      })
+      .catch(err => console.log(err));
   };
 }
 
 function getPhotoLikes(photoId) {
   return (dispatch, getState) => {
-    const {
-      user: { token }
-    } = getState();
+    const { user: { token } } = getState();
     fetch(`/images/${photoId}/likes/`, {
       headers: {
         Authorization: `JWT ${token}`
@@ -139,12 +141,11 @@ function getPhotoLikes(photoId) {
       });
   };
 }
+
 function followUser(userId) {
   return (dispatch, getState) => {
     dispatch(setFollowUser(userId));
-    const {
-      user: { token }
-    } = getState();
+    const { user: { token } } = getState();
     fetch(`/users/${userId}/follow/`, {
       method: "POST",
       headers: {
@@ -160,12 +161,11 @@ function followUser(userId) {
     });
   };
 }
+
 function unfollowUser(userId) {
   return (dispatch, getState) => {
     dispatch(setUnfollowUser(userId));
-    const {
-      user: { token }
-    } = getState();
+    const { user: { token } } = getState();
     fetch(`/users/${userId}/unfollow/`, {
       method: "POST",
       headers: {
@@ -184,9 +184,7 @@ function unfollowUser(userId) {
 
 function getExplore() {
   return (dispatch, getState) => {
-    const {
-      user: { token }
-    } = getState();
+    const { user: { token } } = getState();
     fetch("/users/explore/", {
       headers: {
         Authorization: `JWT ${token}`,
@@ -199,9 +197,55 @@ function getExplore() {
         }
         return response.json();
       })
-      .then(json => dispatch(setExplore(json)));
+      .then(json => dispatch(setUserList(json)));
   };
 }
+
+function searchByTerm(searchTerm) {
+  return async (dispatch, getState) => {
+    const { user: { token } } = getState();
+    const userList = await searchUsers(token, searchTerm);
+    const imageList = await searchImages(token, searchTerm);
+    if (userList === 401 || imageList === 401) {
+      dispatch(logout());
+    }
+    dispatch(setUserList(userList));
+    dispatch(setImageList(imageList));
+  };
+}
+
+function searchUsers(token, searchTerm) {
+  return fetch(`/users/search/?username=${searchTerm}`, {
+    headers: {
+      Authorization: `JWT ${token}`,
+      "Content-Type": "application/json"
+    }
+  })
+    .then(response => {
+      if (response.status === 401) {
+        return 401;
+      }
+      return response.json();
+    })
+    .then(json => json);
+}
+
+function searchImages(token, searchTerm) {
+  return fetch(`/images/search/?hashtags=${searchTerm}`, {
+    headers: {
+      Authorization: `JWT ${token}`,
+      "Content-Type": "application/json"
+    }
+  })
+    .then(response => {
+      if (response.status === 401) {
+        return 401;
+      }
+      return response.json();
+    })
+    .then(json => json);
+}
+
 // initial state
 
 const initialState = {
@@ -223,8 +267,8 @@ function reducer(state = initialState, action) {
       return applyFollowUser(state, action);
     case UNFOLLOW_USER:
       return applyUnfollowUser(state, action);
-    case SET_EXPLORE:
-      return applySetExplore(state, action);
+    case SET_IMAGE_LIST:
+      return applySetImageList(state, action);
     default:
       return state;
   }
@@ -266,8 +310,12 @@ function applyFollowUser(state, action) {
     }
     return user;
   });
-  return { ...state, userList: updatedUserList };
+  return {
+    ...state,
+    userList: updatedUserList
+  };
 }
+
 function applyUnfollowUser(state, action) {
   const { userId } = action;
   const { userList } = state;
@@ -280,11 +328,11 @@ function applyUnfollowUser(state, action) {
   return { ...state, userList: updatedUserList };
 }
 
-function applySetExplore(state, action) {
-  const { userList } = action;
+function applySetImageList(state, action) {
+  const { imageList } = action;
   return {
     ...state,
-    userList
+    imageList
   };
 }
 
@@ -298,7 +346,8 @@ const actionCreators = {
   getPhotoLikes,
   followUser,
   unfollowUser,
-  getExplore
+  getExplore,
+  searchByTerm
 };
 
 export { actionCreators };
