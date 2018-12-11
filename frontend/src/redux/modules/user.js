@@ -7,6 +7,7 @@ const LOGOUT = "LOGOUT";
 const SET_USER_LIST = "SET_USER_LIST";
 const FOLLOW_USER = "FOLLOW_USER";
 const UNFOLLOW_USER = "UNFOLLOW_USER";
+const SET_EXPLORE = "SET_EXPLORE";
 const SET_IMAGE_LIST = "SET_IMAGE_LIST";
 
 // action creators
@@ -41,6 +42,13 @@ function setUnfollowUser(userId) {
 function setUserList(userList) {
   return {
     type: SET_USER_LIST,
+    userList
+  };
+}
+
+function setExplore(userList) {
+  return {
+    type: SET_EXPLORE,
     userList
   };
 }
@@ -197,7 +205,7 @@ function getExplore() {
         }
         return response.json();
       })
-      .then(json => dispatch(setUserList(json)));
+      .then(json => dispatch(setExplore(json)));
   };
 }
 
@@ -234,7 +242,7 @@ function searchImages(token, searchTerm) {
   return fetch(`/images/search/?hashtags=${searchTerm}`, {
     headers: {
       Authorization: `JWT ${token}`,
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
     }
   })
     .then(response => {
@@ -267,6 +275,8 @@ function reducer(state = initialState, action) {
       return applyFollowUser(state, action);
     case UNFOLLOW_USER:
       return applyUnfollowUser(state, action);
+    case SET_EXPLORE:
+      return applySetExplore(state, action);
     case SET_IMAGE_LIST:
       return applySetImageList(state, action);
     default:
@@ -326,6 +336,14 @@ function applyUnfollowUser(state, action) {
     return user;
   });
   return { ...state, userList: updatedUserList };
+}
+
+function applySetExplore(state, action) {
+  const { userList } = action;
+  return {
+    ...state,
+    userList
+  };
 }
 
 function applySetImageList(state, action) {

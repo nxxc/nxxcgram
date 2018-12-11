@@ -2,28 +2,33 @@ import React from "react";
 import PropTypes from "prop-types";
 import styles from "./styles.module.scss";
 import Loading from "components/Loading";
-import UserRow from "components/UserRow";
- const Explore = props => {
+import UserDisplay from "components/UserDisplay";
+
+const Explore = props => {
   if (props.loading) {
     return <LoadingExplore />;
   } else if (props.userList) {
     return <RenderExplore {...props} />;
   }
 };
- const LoadingExplore = props => (
+
+const LoadingExplore = props => (
   <div className={styles.explore}>
     <Loading />
   </div>
 );
- const RenderExplore = props => (
+
+const RenderExplore = props => (
   <div className={styles.explore}>
     {props.userList.map(user => (
-      <UserRow big={true} user={user} key={user.id} />
+      <UserDisplay big={true} horizontal={true} user={user} key={user.id} />
     ))}
   </div>
 );
- Explore.propTypes = {
+
+Explore.propTypes = {
   loading: PropTypes.bool.isRequired,
-  explore: PropTypes.array
+  feed: PropTypes.array
 };
- export default Explore;
+
+export default Explore;
