@@ -1,5 +1,4 @@
 @import "../../config/_variables";
-
 .search {
   display: flex;
   flex-direction: column;
@@ -16,11 +15,16 @@
       font-weight: 600;
       margin-bottom: 20px;
     }
-    .notFound {
+    .not-found {
       text-align: center;
       width: 100%;
       display: block;
       font-weight: 600;
+    }
+    .content {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
     }
   }
 }

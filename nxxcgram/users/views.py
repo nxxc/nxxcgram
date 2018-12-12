@@ -41,7 +41,6 @@ class FollowUser(APIView):
 
         return Response(status=status.HTTP_200_OK)
 
-
 class UnFollowUser(APIView):
 
     def post(self, request, user_id, format=None):

@@ -242,7 +242,7 @@ function searchImages(token, searchTerm) {
   return fetch(`/images/search/?hashtags=${searchTerm}`, {
     headers: {
       Authorization: `JWT ${token}`,
-      "Content-Type": "application/json",
+      "Content-Type": "application/json"
     }
   })
     .then(response => {
